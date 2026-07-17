@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import api from '../services/api';
+import toast from 'react-hot-toast';
 
 const LeadForm = ({ onLeadAdded }) => {
   const [nombre, setNombre] = useState('');
@@ -16,10 +17,11 @@ const LeadForm = ({ onLeadAdded }) => {
       await api.post('/leads', { nombre, email });
       setNombre('');
       setEmail('');
+      toast.success('¡Acción realizada con éxito!');
       onLeadAdded();
     } catch (err) {
       console.error(err);
-      setError('Hubo un error al guardar el lead. Verifica que el email no esté repetido.');
+      toast.error('Hubo un error al procesar la solicitud, verifica que no esté duplicado.');
     } finally {
       setLoading(false);
     }

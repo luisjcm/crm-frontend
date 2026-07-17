@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import LeadForm from '../components/LeadForm';
-import ConfirmModal from '../components/ConfirmModal'; // 🚀 1. Importamos el modal
+import ConfirmModal from '../components/ConfirmModal'; 
+import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const [leads, setLeads] = useState([]);
@@ -35,9 +36,10 @@ const Dashboard = () => {
     try {
       await api.patch(`/leads/${id}/status`, { estado: nuevoEstado });
       fetchLeads(); 
+      toast.success('Estado actualizado correctamente');
     } catch (error) {
       console.error('❌ Error actualizando el estado:', error);
-      alert('Hubo un error al actualizar el estado.');
+      toast.error('Hubo un error al procesar la solicitud.');
     }
   };
 
@@ -56,9 +58,10 @@ const Dashboard = () => {
       fetchLeads();
       setIsModalOpen(false); // Cerramos el modal
       setLeadToDelete(null); // Limpiamos el estado
+      toast.success('El prospecto ha sido eliminado');
     } catch (error) {
       console.error('❌ Error eliminando el lead:', error);
-      alert('Hubo un error al eliminar el lead.');
+      toast.error('Hubo un error al procesar la solicitud.');
     }
   };
 
