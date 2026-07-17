@@ -1,13 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import LeadForm from '../components/LeadForm';
+import ConfirmModal from '../components/ConfirmModal'; // 🚀 1. Importamos el modal
 
 const Dashboard = () => {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // 🚀 2. Nuevos estados para el modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [leadToDelete, setLeadToDelete] = useState(null);
 
-  // Hook para cargar los datos apenas se abre la página
- // 1. Envolvemos la función en useCallback
   const fetchLeads = useCallback(async () => {
     try {
       const response = await api.get('/leads');
@@ -17,46 +20,50 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, []); // 2. Arreglo vacío: la función se memoriza una sola vez
+  }, []);
 
-  // 3. Agregamos fetchLeads como dependencia del useEffect
   useEffect(() => {
-    // Envolvemos la ejecución en una función asíncrona interna
     const initFetch = async () => {
       await fetchLeads();
     };
-
     initFetch();
   }, [fetchLeads]);
 
-  // 🚀 NUEVA FUNCIÓN: Actualizar estado
   const updateStatus = async (id, nuevoEstado) => {
     try {
       await api.patch(`/leads/${id}/status`, { estado: nuevoEstado });
-      fetchLeads(); // Recargamos la tabla para ver el cambio
+      fetchLeads(); 
     } catch (error) {
       console.error('❌ Error actualizando el estado:', error);
       alert('Hubo un error al actualizar el estado.');
     }
   };
 
-  // 🚀 NUEVA FUNCIÓN: Eliminar lead
-  const deleteLead = async (id) => {
-    // Pedimos confirmación antes de borrar
-    if (!window.confirm('¿Estás seguro de que deseas eliminar este prospecto permanentemente?')) return;
+  // 🚀 3. Modificamos deleteLead para que solo abra el modal
+  const openDeleteModal = (lead) => {
+    setLeadToDelete(lead);
+    setIsModalOpen(true);
+  };
+
+  // 🚀 4. Creamos la función que realmente hace el borrado cuando el usuario confirma
+  const confirmDelete = async () => {
+    if (!leadToDelete) return;
     
     try {
-      await api.delete(`/leads/${id}`);
-      fetchLeads(); // Recargamos la tabla para removerlo visualmente
+      await api.delete(`/leads/${leadToDelete.id}`);
+      fetchLeads();
+      setIsModalOpen(false); // Cerramos el modal
+      setLeadToDelete(null); // Limpiamos el estado
     } catch (error) {
       console.error('❌ Error eliminando el lead:', error);
       alert('Hubo un error al eliminar el lead.');
     }
   };
 
- return (
+  return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8 transition-colors duration-200">
       <div className="mx-auto max-w-6xl">
+        {/* ... (tu header y tu LeadForm quedan exactamente igual) ... */}
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Panel de Leads</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">Gestiona tus prospectos y su estado actual.</p>
@@ -69,13 +76,13 @@ const Dashboard = () => {
         ) : (
           <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm transition-colors">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              {/* ... (thead queda igual) ... */}
               <thead className="bg-gray-50 dark:bg-gray-900/50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nombre</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Email</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Estado</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Fecha</th>
-                  {/* NUEVA COLUMNA */}
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Acciones</th>
                 </tr>
               </thead>
@@ -92,7 +99,7 @@ const Dashboard = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{lead.nombre}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{lead.email}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
+                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
                           ${lead.estado === 'nuevo' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' : 
                             lead.estado === 'contactado' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' : 
                             'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'}`}>
@@ -102,8 +109,6 @@ const Dashboard = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                         {new Date(lead.fecha_creacion).toLocaleDateString()}
                       </td>
-                      
-                      {/* 🚀 NUEVA CELDA DE ACCIONES */}
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
                         <select
                           value={lead.estado}
@@ -115,14 +120,14 @@ const Dashboard = () => {
                           <option value="cerrado">Cerrado</option>
                         </select>
 
+                        {/* 🚀 5. Cambiamos el onClick para que abra nuestro modal pasándole el lead */}
                         <button
-                          onClick={() => deleteLead(lead.id)}
+                          onClick={() => openDeleteModal(lead)}
                           className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors font-semibold"
                         >
                           Eliminar
                         </button>
                       </td>
-
                     </tr>
                   ))
                 )}
@@ -131,6 +136,15 @@ const Dashboard = () => {
           </div>
         )}
       </div>
+
+      {/* 🚀 6. Renderizamos el Modal al final de nuestro componente */}
+      <ConfirmModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Eliminar Prospecto"
+        message={`¿Estás completamente seguro de que deseas eliminar a ${leadToDelete?.nombre}? Esta acción no se puede deshacer.`}
+      />
     </div>
   );
 };
