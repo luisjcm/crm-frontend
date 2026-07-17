@@ -6,8 +6,10 @@ import ConfirmModal from '../components/ConfirmModal'; // 🚀 1. Importamos el 
 const Dashboard = () => {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('todos');
   
-  // 🚀 2. Nuevos estados para el modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState(null);
 
@@ -60,6 +62,14 @@ const Dashboard = () => {
     }
   };
 
+  // 🚀 LÓGICA DE FILTRADO (Esto sucede antes del map)
+  const filteredLeads = leads.filter(lead => {
+    const matchesSearch = lead.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          lead.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'todos' || lead.estado === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8 transition-colors duration-200">
       <div className="mx-auto max-w-6xl">
@@ -67,6 +77,27 @@ const Dashboard = () => {
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Panel de Leads</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">Gestiona tus prospectos y su estado actual.</p>
+        
+        {/* 🚀 BARRA DE BÚSQUEDA Y FILTROS */}
+          <div className="flex flex-col md:flex-row gap-4 mt-6">
+            <input
+              type="text"
+              placeholder="Buscar por nombre o email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+            />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md text-gray-700 dark:text-gray-200 outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+            >
+              <option value="todos">Todos los estados</option>
+              <option value="nuevo">Nuevo</option>
+              <option value="contactado">Contactado</option>
+              <option value="cerrado">Cerrado</option>
+            </select>
+          </div>
         </header>
 
         <LeadForm onLeadAdded={fetchLeads} />
@@ -94,7 +125,7 @@ const Dashboard = () => {
                     </td>
                   </tr>
                 ) : (
-                  leads.map((lead) => (
+                  filteredLeads.map((lead) => (
                     <tr key={lead.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{lead.nombre}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{lead.email}</td>
