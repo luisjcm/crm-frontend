@@ -1,25 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
+import LeadForm from '../components/LeadForm';
 
 const Dashboard = () => {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Hook para cargar los datos apenas se abre la página
+ // 1. Envolvemos la función en useCallback
+  const fetchLeads = useCallback(async () => {
+    try {
+      const response = await api.get('/leads');
+      setLeads(response.data);
+    } catch (error) {
+      console.error('❌ Error obteniendo los leads:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []); // 2. Arreglo vacío: la función se memoriza una sola vez
+
+  // 3. Agregamos fetchLeads como dependencia del useEffect
   useEffect(() => {
-    const fetchLeads = async () => {
-      try {
-        const response = await api.get('/leads');
-        setLeads(response.data);
-      } catch (error) {
-        console.error('❌ Error obteniendo los leads:', error);
-      } finally {
-        setLoading(false);
-      }
+    // Envolvemos la ejecución en una función asíncrona interna
+    const initFetch = async () => {
+      await fetchLeads();
     };
 
-    fetchLeads();
-  }, []);
+    initFetch();
+  }, [fetchLeads]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -29,6 +37,8 @@ const Dashboard = () => {
           <p className="text-gray-500 mt-1">Gestiona tus prospectos y su estado actual.</p>
         </header>
 
+        {/* Aquí inyectamos nuestro nuevo componente */}
+<LeadForm onLeadAdded={fetchLeads} />
         {loading ? (
           <div className="text-center py-10 text-gray-500">Cargando datos...</div>
         ) : (
