@@ -21,6 +21,13 @@ const Dashboard = () => {
       setLeads(response.data);
     } catch (error) {
       console.error('❌ Error obteniendo los leads:', error);
+
+      if (error.code === 'ERR_NETWORK') {
+        toast.error('No se pudo conectar con el servidor para cargar los datos.');
+      } else {
+        toast.error('Hubo un error al cargar los datos.');
+      }
+
     } finally {
       setLoading(false);
     }

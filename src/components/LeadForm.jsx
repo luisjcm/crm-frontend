@@ -19,9 +19,24 @@ const LeadForm = ({ onLeadAdded }) => {
       setEmail('');
       toast.success('¡Acción realizada con éxito!');
       onLeadAdded();
-    } catch (err) {
-      console.error(err);
-      toast.error('Hubo un error al procesar la solicitud, verifica que no esté duplicado.');
+    } catch (error) {
+      console.error('Detalle del error:', error);
+
+      if(error.response) {
+
+        if (error.response.status === 400) {
+          toast.error(error.response.data.message || 'Error de validación o correo duplicado.');
+        } else {
+          toast.error(`Error del servidor: ${error.response.status}`);
+        }
+      }
+
+      else if (error.request) {
+        toast.error('No se pudo conectar con el servidor. (API inaccesible)');
+      } 
+      else{
+        toast.error('Error desconocido. Por favor, intenta nuevamente.');
+      }
     } finally {
       setLoading(false);
     }

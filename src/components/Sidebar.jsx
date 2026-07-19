@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Sidebar = () => {
 
     return (
@@ -9,9 +11,20 @@ const Sidebar = () => {
 
             <nav className="flex-1 px-4 mt-6">
                 <ul className="space-y-2">
-                    <li><a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600/10 text-blue-400 font-medium transition-colors"><span>👥</span>Prospectos</a></li>
-
-                    <li><a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 text-gray-300 font-medium transition-colors"><span>📊</span>Métricas</a></li>
+                    
+                    <li>
+                        {/* Cambiamos <a> por <Link> y 'href' por 'to' */}
+                        <Link to="/" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600/10 text-blue-400 font-medium transition-colors">
+                        <span>👥</span>
+                        Prospectos
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/metricas" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-gray-100 transition-colors">
+                        <span>📊</span>
+                        Métricas
+                        </Link>
+                    </li>
 
                 </ul>
             </nav>
