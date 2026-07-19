@@ -1,6 +1,16 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
+
+    // Creamos una función auxiliar para no repetir las clases largas de Tailwind
+  // Si isActive es true, le damos el fondo azul. Si es false, le damos el gris con hover.
+  const getNavClasses = ({ isActive }) => {
+    const baseClasses = "flex items-center gap-3 px-4 py-2 md:py-3 rounded-lg font-medium whitespace-nowrap transition-colors";
+    const activeClasses = "bg-blue-600/10 text-blue-400";
+    const inactiveClasses = "text-gray-400 hover:bg-gray-800 hover:text-gray-100";
+    
+    return `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`;
+  };
 
     return (
         // En móvil es una barra superior, en md: vuelve a ser un panel lateral (w-64)
@@ -17,17 +27,18 @@ const Sidebar = () => {
                 <ul className="flex flex-row md:flex-col gap-2">
                     
                     <li>
-                        {/* Cambiamos <a> por <Link> y 'href' por 'to' */}
-                        <Link to="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600/10 text-blue-400 font-medium whitespace-nowrap transition-colors">
-                        <span>👥</span>
-                        Prospectos
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/metricas" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-gray-100 transition-colors">
-                        <span>📊</span>
-                        Métricas
-                        </Link>
+                        {/* 2. Reemplazamos <Link> por <NavLink> y le pasamos nuestra función al className */}
+                                <NavLink to="/" className={getNavClasses}>
+                                <span>👥</span>
+                                Prospectos
+                                </NavLink>
+                            </li>
+                            <li>
+                                {/* 3. Hacemos lo mismo aquí */}
+                                <NavLink to="/metricas" className={getNavClasses}>
+                                <span>📊</span>
+                                Métricas
+                                </NavLink>
                     </li>
                 </ul>
             </nav>

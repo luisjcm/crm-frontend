@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
 
 import Dashboard from './pages/Dashboard';
+import Metricas from './pages/Metricas';
 import NotificationProvider from './components/NotificationProvider';
 import Layout from './components/Layout';
 
@@ -12,10 +13,8 @@ function App() {
           
           <Routes>
           {/* La ruta raíz '/' cargará el Dashboard */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          
-          {/* Dejamos preparada la ruta para las métricas */}
-          {/* <Route path="/metricas" element={<Metricas />} /> */}
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/metricas" element={<Metricas />} />
         </Routes>
         
       </Layout>
