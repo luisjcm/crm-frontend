@@ -10,6 +10,17 @@ const LeadForm = ({ onLeadAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+      if(!nombre.trim() || !email.trim()) {
+        toast.error('Por favor, completa todos los campos antes de enviar.');
+        return;
+      }
+
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        toast.error('Por favor, ingresa un correo electrónico válido.');
+        return;
+      }
+
     setLoading(true);
     setError(null);
 
@@ -46,7 +57,7 @@ const LeadForm = ({ onLeadAdded }) => {
     <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm mb-8 transition-colors">
       <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Agregar Nuevo Lead</h2>
       
-      <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4 items-start md:items-end">
+      <form noValidate onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4 items-start md:items-end">
         <div className="w-full">
           <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
         {/* Se usan inputs controlados para que React sea la unica fuente de la verdad, esto permite limpiar el formulario después de enviarlo */ }

@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+/* 1. Para navegadores basados en WebKit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px; 
+}
+
+::-webkit-scrollbar-track {
+  background: #111827; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #374151; 
+  border-radius: 4px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563; 
+}
+
+/* 2. Para Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #374151 #111827;
+}
