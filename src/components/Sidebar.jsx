@@ -40,6 +40,13 @@ const Sidebar = () => {
                                 Métricas
                                 </NavLink>
                     </li>
+                     <li>
+                                {/* 3. Hacemos lo mismo aquí */}
+                                <NavLink to="/inbox" className={getNavClasses}>
+                                <span>💬</span>
+                                Bandeja de Entrada
+                                </NavLink>
+                    </li>
                 </ul>
             </nav>
             
