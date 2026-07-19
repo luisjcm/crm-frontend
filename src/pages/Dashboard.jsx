@@ -118,8 +118,8 @@ const Dashboard = () => {
         {loading ? (
           <div className="text-center py-10 text-gray-500 dark:text-gray-400">Cargando datos...</div>
         ) : (
-          <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm transition-colors">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="overflow-x-auto rounded-lg shadow ring-1 ring-gray-700 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm transition-colors">
+            <table className="w-full text-left border-collapse min-w-[600px]">
               {/* ... (thead queda igual) ... */}
               <thead className="bg-gray-50 dark:bg-gray-900/50">
                 <tr>

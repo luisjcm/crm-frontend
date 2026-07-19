@@ -12,7 +12,7 @@ function App() {
           
           <Routes>
           {/* La ruta raíz '/' cargará el Dashboard */}
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           
           {/* Dejamos preparada la ruta para las métricas */}
           {/* <Route path="/metricas" element={<Metricas />} /> */}
