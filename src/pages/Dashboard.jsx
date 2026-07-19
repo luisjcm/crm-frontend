@@ -146,10 +146,10 @@ const Dashboard = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{lead.nombre}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{lead.email}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
-                          ${lead.estado === 'nuevo' ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300' : 
-                            lead.estado === 'contactado' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' : 
-                            'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'}`}>
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
+                          ${lead.estado.toLowerCase() === 'nuevo' ? 'bg-nuevo-100 text-nuevo-800 dark:bg-nuevo-900/30 dark:text-nuevo-300' : 
+                            lead.estado.toLowerCase() === 'contactado' ? 'bg-contactado-100 text-contactado-800 dark:bg-contactado-900/30 dark:text-contactado-300' : 
+                            'bg-cerrado-100 text-cerrado-800 dark:bg-cerrado-900/30 dark:text-cerrado-300'}`}>
                           {lead.estado}
                         </span>
                       </td>

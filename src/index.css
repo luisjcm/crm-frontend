@@ -13,6 +13,24 @@
   --color-primary-600: #2563eb; /* Usado para botones principales (hover) */
   --color-primary-700: #1d4ed8; /* Usado para bordes o sombras oscuras */
 
+  /* Paleta Estado: Nuevo (Tonos Azules) */
+  --color-nuevo-100: #dbeafe;
+  --color-nuevo-300: #93c5fd;
+  --color-nuevo-800: #1e40af;
+  --color-nuevo-900: #1e3a8a;
+
+  /* Paleta Estado: Contactado (Tonos Ámbar/Amarillos) */
+  --color-contactado-100: #fef3c7;
+  --color-contactado-300: #fcd34d;
+  --color-contactado-800: #92400e;
+  --color-contactado-900: #78350f;
+
+  /* Paleta Estado: Cerrado (Tonos Verdes) */
+  --color-cerrado-100: #d1fae5;
+  --color-cerrado-300: #6ee7b7;
+  --color-cerrado-800: #065f46;
+  --color-cerrado-900: #064e3b;
+
   /* Paleta de Estados (Gráficas y Badges) */
   --color-status-nuevo: var(--color-primary-500); /* Hereda el azul corporativo */
   --color-status-contactado: #f59e0b; /* Ámbar */
