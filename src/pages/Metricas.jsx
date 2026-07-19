@@ -36,9 +36,12 @@ const Metricas = () => {
     
     // Recorremos los leads reales y sumamos
     leads.forEach((lead) => {
-      if (conteo[lead.estado] !== undefined) {
-        conteo[lead.estado] += 1;
-      }
+      // Tomamos el estado, si existe lo pasamos a minúsculas para evitar errores
+      const estadoDB = lead.estado ? lead.estado.toLowerCase() : '';
+
+      if (estadoDB === 'nuevo') conteo.Nuevo += 1;
+      else if (estadoDB === 'contactado') conteo.Contactado += 1;
+      else if (estadoDB === 'cerrado') conteo.Cerrado += 1;
     });
 
     // Recharts necesita que los datos sean un arreglo de objetos con 'name' y 'value'

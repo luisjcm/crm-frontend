@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Dashboard from './pages/Dashboard';
 import Metricas from './pages/Metricas';
@@ -7,7 +7,7 @@ import Layout from './components/Layout';
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Layout>
         <NotificationProvider/>
           
@@ -18,7 +18,7 @@ function App() {
         </Routes>
         
       </Layout>
-    </BrowserRouter>
+    </Router>
   );
 }
 
