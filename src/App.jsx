@@ -1,12 +1,13 @@
 import Dashboard from './pages/Dashboard';
 import NotificationProvider from './components/NotificationProvider';
+import Layout from './components/Layout';
 
 function App() {
   return (
-    <main>
+    <Layout>
       <NotificationProvider />
       <Dashboard />
-    </main>
+    </Layout>
   );
 }
 
