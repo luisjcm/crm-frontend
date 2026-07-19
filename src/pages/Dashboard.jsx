@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState(null);
 
+  // Esta es una funcion que obtiene los leads desde la API y actualiza el estado con un Callback para que no se vuelva a crear en cada renderizado
   const fetchLeads = useCallback(async () => {
     try {
       const response = await api.get('/leads');
@@ -23,9 +24,11 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, []); //Lista de dependencias vacía para que no se vuelva a crear en cada renderizado
 
   useEffect(() => {
+
+    // Llamamos a la función fetchLeads dentro de un initFetch para evitar advertencias de dependencias en useEffect
     const initFetch = async () => {
       await fetchLeads();
     };
@@ -128,8 +131,11 @@ const Dashboard = () => {
                     </td>
                   </tr>
                 ) : (
+
+                    
                   filteredLeads.map((lead) => (
                     <tr key={lead.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        {/* ... Aqui se usa un .map para retornar un arreglo de elementos , la key le indica a react quien es quien para no re-renderizar toda la tabla si se elimina un elemento ... */}
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{lead.nombre}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{lead.email}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
