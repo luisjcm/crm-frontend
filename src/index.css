@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+
+@theme {
+  /* 
+    Definimos nuestra paleta "primary". 
+    Actualmente son los tonos azules que hemos usado, 
+    pero si mañana los cambias por códigos violetas o verdes, 
+    todo el CRM mutará automáticamente.
+  */
+  --color-primary-400: #60a5fa; /* Usado para textos claros y hover */
+  --color-primary-500: #3b82f6; /* Usado para botones principales y gráficas */
+  --color-primary-600: #2563eb; /* Usado para botones principales (hover) */
+  --color-primary-700: #1d4ed8; /* Usado para bordes o sombras oscuras */
+
+  /* Paleta de Estados (Gráficas y Badges) */
+  --color-status-nuevo: var(--color-primary-500); /* Hereda el azul corporativo */
+  --color-status-contactado: #f59e0b; /* Ámbar */
+  --color-status-cerrado: #10b981; /* Verde */
+}
+
 /* 1. Para navegadores basados en WebKit (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
   width: 8px; 

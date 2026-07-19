@@ -53,8 +53,8 @@ const Metricas = () => {
   };
 
   const donutData = procesarDatosDonut();
-  // Colores de Tailwind: Azul (Nuevo), Ámbar (Contactado), Verde (Cerrado)
-  const DONUT_COLORS = ['#3b82f6', '#f59e0b', '#10b981']; 
+  // Colores para los estados usando variables CSS globales
+  const DONUT_COLORS = ['var(--color-status-nuevo)', 'var(--color-status-contactado)', 'var(--color-status-cerrado)']; 
 
   // 3. Datos demo para el Gráfico de Barras (Evolución)
   // Como aún no tenemos fechas de registro complejas, simulamos un crecimiento 
@@ -126,7 +126,7 @@ const Metricas = () => {
                   cursor={{ fill: '#374151', opacity: 0.4 }}
                   contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6' }}
                 />
-                <Bar dataKey="prospectos" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="prospectos" fill="var(--color-primary-500)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

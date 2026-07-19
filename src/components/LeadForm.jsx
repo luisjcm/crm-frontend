@@ -67,7 +67,7 @@ const LeadForm = ({ onLeadAdded }) => {
             required
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors"
             placeholder="Ej. Juan Pérez"
           />
         </div>
@@ -80,7 +80,7 @@ const LeadForm = ({ onLeadAdded }) => {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors"
             placeholder="juan@ejemplo.com"
           />
         </div>
@@ -88,7 +88,7 @@ const LeadForm = ({ onLeadAdded }) => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full md:w-auto px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:bg-blue-300 dark:disabled:bg-blue-800 transition-colors"
+          className="w-full md:w-auto px-6 py-2 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:bg-primary-300 dark:disabled:bg-primary-800 transition-colors"
         >
           {loading ? 'Guardando...' : 'Guardar'}
         </button>

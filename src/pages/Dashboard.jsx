@@ -98,12 +98,12 @@ const Dashboard = () => {
               placeholder="Buscar por nombre o email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
             />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md text-gray-700 dark:text-gray-200 outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md text-gray-700 dark:text-gray-200 outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
             >
               <option value="todos">Todos los estados</option>
               <option value="nuevo">Nuevo</option>
@@ -147,7 +147,7 @@ const Dashboard = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{lead.email}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
-                          ${lead.estado === 'nuevo' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' : 
+                          ${lead.estado === 'nuevo' ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300' : 
                             lead.estado === 'contactado' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' : 
                             'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'}`}>
                           {lead.estado}
@@ -160,7 +160,7 @@ const Dashboard = () => {
                         <select
                           value={lead.estado}
                           onChange={(e) => updateStatus(lead.id, e.target.value)}
-                          className="text-xs bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500 transition-colors cursor-pointer"
+                          className="text-xs bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-primary-500 transition-colors cursor-pointer"
                         >
                           <option value="nuevo">Nuevo</option>
                           <option value="contactado">Contactado</option>

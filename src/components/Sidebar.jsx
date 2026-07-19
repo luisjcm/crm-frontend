@@ -6,7 +6,7 @@ const Sidebar = () => {
   // Si isActive es true, le damos el fondo azul. Si es false, le damos el gris con hover.
   const getNavClasses = ({ isActive }) => {
     const baseClasses = "flex items-center gap-3 px-4 py-2 md:py-3 rounded-lg font-medium whitespace-nowrap transition-colors";
-    const activeClasses = "bg-blue-600/10 text-blue-400";
+    const activeClasses = "bg-primary-600/10 text-primary-400";
     const inactiveClasses = "text-gray-400 hover:bg-gray-800 hover:text-gray-100";
     
     return `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`;
@@ -17,7 +17,7 @@ const Sidebar = () => {
         <aside className="w-full md:w-64 bg-gray-900 border-b md:border-b-0 md:border-r border-gray-800 text-gray-100  flex flex-col md:min-h-screen shrink-0 transition-colors duration-200">
 
             <div className="p-4 md:p-6 flex justify-between items-center">
-                <h2 className="text-xl md:text-2xl font-bold text-blue-500 tracking-wider">CRM CORE</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-primary-500 tracking-wider">CRM CORE</h2>
             </div>
 
 

@@ -22,7 +22,7 @@ const Inbox = () => {
             <input 
               type="text" 
               placeholder="Buscar chat..." 
-              className="w-full bg-gray-900 text-gray-200 text-sm rounded-lg px-4 py-2 border border-gray-700 focus:outline-none focus:border-blue-500"
+             className="w-full bg-gray-900 text-gray-200 text-sm rounded-lg px-4 py-2 border border-gray-700 focus:outline-none focus:border-primary-500"
             />
           </div>
         </div>
@@ -33,7 +33,7 @@ const Inbox = () => {
             <div 
               key={chat.id} 
               onClick={() => setChatActivo(chat)}
-              className={`p-4 border-b border-gray-700/50 cursor-pointer transition-colors ${chatActivo.id === chat.id ? 'bg-blue-600/20' : 'hover:bg-gray-700/50'}`}
+              className={`p-4 border-b border-gray-700/50 cursor-pointer transition-colors ${chatActivo.id === chat.id ? 'bg-primary-600/20' : 'hover:bg-gray-700/50'}`}
             >
               <div className="flex justify-between items-start mb-1">
                 <h4 className="font-semibold text-gray-200">{chat.nombre}</h4>
@@ -42,12 +42,12 @@ const Inbox = () => {
               <div className="flex justify-between items-center">
                 <p className="text-sm text-gray-400 truncate pr-2">{chat.ultimoMensaje}</p>
                 {chat.noLeidos > 0 && (
-                  <span className="bg-blue-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                  <span className="bg-primary-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                     {chat.noLeidos}
                   </span>
                 )}
               </div>
-              <span className="text-xs text-blue-400 mt-1 block">{chat.origen}</span>
+              <span className="text-xs text-primary-400 mt-1 block">{chat.origen}</span>
             </div>
           ))}
         </div>
@@ -75,7 +75,7 @@ const Inbox = () => {
             <span className="text-xs text-gray-500 mt-1">10:28 AM</span>
           </div>
           <div className="flex flex-col items-end">
-            <span className="bg-blue-600 text-white p-3 rounded-lg rounded-tr-none max-w-md">
+            <span className="bg-primary-600 text-white p-3 rounded-lg rounded-tr-none max-w-md">
               ¡Hola Juan! Claro que sí, con gusto te damos toda la información. ¿De qué ciudad nos escribes?
             </span>
             <span className="text-xs text-gray-500 mt-1">10:30 AM</span>
@@ -88,9 +88,9 @@ const Inbox = () => {
             <input 
               type="text" 
               placeholder="Escribe un mensaje..." 
-              className="flex-1 bg-gray-900 text-gray-200 rounded-lg px-4 py-3 border border-gray-700 focus:outline-none focus:border-blue-500"
+              className="flex-1 bg-gray-900 text-gray-200 rounded-lg px-4 py-3 border border-gray-700 focus:outline-none focus:border-primary-500"
             />
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <button className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
               Enviar
             </button>
           </div>
