@@ -34,6 +34,7 @@ const LeadForm = ({ onLeadAdded }) => {
       <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4 items-start md:items-end">
         <div className="w-full">
           <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
+        {/* Se usan inputs controlados para que React sea la unica fuente de la verdad, esto permite limpiar el formulario después de enviarlo */ }
           <input
             type="text"
             id="nombre"
