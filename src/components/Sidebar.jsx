@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { Users, BarChart2, MessageSquare, Hexagon } from 'lucide-react';
 
 const Sidebar = () => {
 
@@ -17,7 +18,9 @@ const Sidebar = () => {
         <aside className="w-full md:w-64 bg-gray-900 border-b md:border-b-0 md:border-r border-gray-800 text-gray-100  flex flex-col md:min-h-screen shrink-0 transition-colors duration-200">
 
             <div className="p-4 md:p-6 flex justify-between items-center">
-                <h2 className="text-xl md:text-2xl font-bold text-primary-500 tracking-wider">CRM CORE</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-primary-500 tracking-wider flex items-center gap-2">
+                  <Hexagon className="w-6 h-6" /> CRM CORE
+                </h2>
             </div>
 
 
@@ -29,21 +32,21 @@ const Sidebar = () => {
                     <li>
                         {/* 2. Reemplazamos <Link> por <NavLink> y le pasamos nuestra función al className */}
                                 <NavLink to="/" className={getNavClasses}>
-                                <span>👥</span>
+                                <Users className="w-5 h-5" />
                                 Prospectos
                                 </NavLink>
                             </li>
                             <li>
                                 {/* 3. Hacemos lo mismo aquí */}
                                 <NavLink to="/metricas" className={getNavClasses}>
-                                <span>📊</span>
+                                <BarChart2 className="w-5 h-5" />
                                 Métricas
                                 </NavLink>
                     </li>
                      <li>
                                 {/* 3. Hacemos lo mismo aquí */}
                                 <NavLink to="/inbox" className={getNavClasses}>
-                                <span>💬</span>
+                                <MessageSquare className="w-5 h-5" />
                                 Bandeja de Entrada
                                 </NavLink>
                     </li>

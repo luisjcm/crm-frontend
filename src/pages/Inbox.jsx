@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ExternalLink, Send } from 'lucide-react';
 
 const Inbox = () => {
   // Datos simulados para visualizar el diseño
@@ -61,8 +62,8 @@ const Inbox = () => {
             <h3 className="text-lg font-bold text-gray-100">{chatActivo.nombre}</h3>
             <span className="text-sm text-green-400">En línea ({chatActivo.origen})</span>
           </div>
-          <button className="text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1 rounded transition-colors">
-            Ver Lead
+          <button className="flex items-center gap-2 text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1 rounded transition-colors">
+            <ExternalLink className="w-4 h-4" /> Ver Lead
           </button>
         </div>
 
@@ -90,8 +91,8 @@ const Inbox = () => {
               placeholder="Escribe un mensaje..." 
               className="flex-1 bg-gray-900 text-gray-200 rounded-lg px-4 py-3 border border-gray-700 focus:outline-none focus:border-primary-500"
             />
-            <button className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-              Enviar
+            <button className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+              Enviar <Send className="w-4 h-4" />
             </button>
           </div>
         </div>
