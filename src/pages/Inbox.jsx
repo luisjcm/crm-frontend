@@ -5,18 +5,37 @@ import { io } from 'socket.io-client';
 const socket = io('http://localhost:3000');
 
 export default function Inbox() {
-  const [chatActivoId, setChatActivoId] = useState(1);
+const [chatActivoId, setChatActivoId] = useState(null);
+  const [chatActivo, setChatActivo] = useState(null);
   const [mensajeTexto, setMensajeTexto] = useState('');
   
-  // Diccionario de memoria temporal simulando la Base de Datos
-  const [historialPorChat, setHistorialPorChat] = useState({
-    1: [], // Mensajes de Juan
-    2: []  // Mensajes de María
-  });
+  const [conversaciones, setConversaciones] = useState([]);
+  const [historialPorChat, setHistorialPorChat] = useState({});
 
-  useEffect(() => {
+ useEffect(() => {
+    // 1. Obtener la data inicial desde PostgreSQL vía API
+    const cargarInbox = async () => {
+      try {
+        const respuesta = await fetch('http://localhost:3000/leads/inbox');
+        const data = await respuesta.json();
+        
+        setConversaciones(data.conversaciones);
+        setHistorialPorChat(data.historialPorChat);
+        
+        // Si hay chats, seleccionar el primero por defecto
+        if (data.conversaciones.length > 0) {
+          setChatActivo(data.conversaciones[0]);
+          setChatActivoId(data.conversaciones[0].id);
+        }
+      } catch (error) {
+        console.error('❌ Error cargando el inbox:', error);
+      }
+    };
+
+    cargarInbox();
+
+    // 2. Escuchar mensajes entrantes en tiempo real
     socket.on('mensaje_entrante', (msg) => {
-      // Guardamos el mensaje en la "bolsa" del chat correspondiente
       setHistorialPorChat((prev) => ({
         ...prev,
         [msg.chatId]: [...(prev[msg.chatId] || []), msg]
@@ -41,14 +60,6 @@ export default function Inbox() {
     socket.emit('nuevo_mensaje', nuevoMensaje);
     setMensajeTexto('');
   };
-
-  // Datos simulados para visualizar el diseño
-  const [conversaciones] = useState([
-    { id: 1, nombre: 'Juan Pérez', origen: 'WhatsApp', ultimoMensaje: '¿Tienen disponibilidad?', hora: '10:30 AM', noLeidos: 2 },
-    { id: 2, nombre: 'María Gómez', origen: 'Messenger', ultimoMensaje: 'Gracias por la info.', hora: 'Ayer', noLeidos: 0 },
-  ]);
-
-  const [chatActivo, setChatActivo] = useState(conversaciones[0]);
 
   return (
     // Altura calculada para ocupar toda la pantalla menos un posible header
@@ -97,51 +108,61 @@ export default function Inbox() {
         </div>
       </div>
 
-      {/* PANEL DERECHO: Área de Chat */}
+     {/* PANEL DERECHO: Área de Chat */}
       <div className="hidden md:flex flex-1 flex-col h-screen bg-gray-900">
         
-        {/* Header del Chat */}
-        <div className="p-4 border-b border-gray-700 bg-gray-800 flex justify-between items-center shrink-0">
-          <div>
-            <h3 className="text-lg font-bold text-gray-100">{chatActivo.nombre}</h3>
-            <span className="text-sm text-green-400">En línea ({chatActivo.origen})</span>
+        {!chatActivo ? (
+          <div className="flex-1 flex items-center justify-center text-gray-500">
+            Cargando conversaciones...
           </div>
-          <button className="flex items-center gap-2 text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1 rounded transition-colors">
-            <ExternalLink className="w-4 h-4" /> Ver Lead
-          </button>
-        </div>
-
-        {/* ÁREA DE MENSAJES (Contenedor con flex-1) */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {(historialPorChat[chatActivoId] || []).map((msg) => (
-            <div key={msg.id} className="flex flex-col items-end">
-              <div className="bg-primary-600 text-white p-3 rounded-lg rounded-br-none max-w-[80%]">
-                {msg.texto}
+        ) : (
+          <>
+            {/* Header del Chat */}
+            <div className="p-4 border-b border-gray-700 bg-gray-800 flex justify-between items-center shrink-0">
+              <div>
+                <h3 className="text-lg font-bold text-gray-100">{chatActivo.nombre}</h3>
+                <span className="text-sm text-green-400">En línea ({chatActivo.origen})</span>
               </div>
-              <span className="text-xs text-gray-400 mt-1">Ahora</span>
+              <button className="flex items-center gap-2 text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1 rounded transition-colors">
+                <ExternalLink className="w-4 h-4" /> Ver Lead
+              </button>
             </div>
-          ))}
-        </div>
 
-        {/* Input de Envío */}
-        <div className="p-4 border-t border-gray-700 bg-gray-800 shrink-0">
-          <div className="flex gap-2 relative">
-            <input 
-              type="text" 
-              value={mensajeTexto}
-              onChange={(e) => setMensajeTexto(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && enviarMensaje()}
-              placeholder="Escribe un mensaje..." 
-              className="flex-1 bg-gray-900 text-gray-200 rounded-lg px-4 py-3 border border-gray-700 focus:outline-none focus:border-primary-500"
-            />
-            <button 
-              onClick={enviarMensaje}
-              className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-            >
-              <Send className="w-4 h-4" /> Enviar
-            </button>
-          </div>
-        </div>
+            {/* ÁREA DE MENSAJES */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {(historialPorChat[chatActivoId] || []).map((msg) => (
+                <div key={msg.id} className={`flex flex-col mt-4 ${msg.sender === 'yo' ? 'items-end' : 'items-start'}`}>
+                  <div className={`p-3 rounded-lg max-w-[80%] ${msg.sender === 'yo' ? 'bg-primary-600 text-white rounded-br-none' : 'bg-gray-700 text-gray-100 rounded-bl-none'}`}>
+                    {msg.texto}
+                  </div>
+                  <span className="text-xs text-gray-500 mt-1">
+                    {msg.sender === 'yo' ? 'Tú' : chatActivo.nombre}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Input de Envío */}
+            <div className="p-4 border-t border-gray-700 bg-gray-800 shrink-0">
+              <div className="flex gap-2 relative">
+                <input 
+                  type="text" 
+                  value={mensajeTexto}
+                  onChange={(e) => setMensajeTexto(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && enviarMensaje()}
+                  placeholder="Escribe un mensaje..." 
+                  className="flex-1 bg-gray-900 text-gray-200 rounded-lg px-4 py-3 border border-gray-700 focus:outline-none focus:border-primary-500"
+                />
+                <button 
+                  onClick={enviarMensaje}
+                  className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                >
+                  <Send className="w-4 h-4" /> Enviar
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
     </div>
