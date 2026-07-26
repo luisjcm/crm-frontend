@@ -1,7 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ExternalLink, Send } from 'lucide-react';
+import { io } from 'socket.io-client';
 
-const Inbox = () => {
+  const socket = io('http://localhost:3000');
+
+
+export default function Inbox() {
+  const [mensajeTexto, setMensajeTexto] = useState('');
+  const [listaMensajes, setListaMensajes] = useState([]);
+
+  useEffect(() => {
+    // Escuchar mensajes entrantes
+    socket.on('mensaje_entrante', (msg) => {
+      setListaMensajes((prev) => [...prev, msg]);
+    });
+
+    // Limpiar el listener al desmontar
+    return () => {
+      socket.off('mensaje_entrante');
+    };
+  }, []);
+
+  const enviarMensaje = () => {
+    if (!mensajeTexto.trim()) return;
+    
+    // Disparar evento al backend
+    socket.emit('nuevo_mensaje', { 
+        texto: mensajeTexto, 
+        sender: 'yo', 
+        id: Date.now() 
+    });
+    
+    setMensajeTexto(''); // Limpiar input
+  };
+
   // Datos simulados para visualizar el diseño
   const [conversaciones] = useState([
     { id: 1, nombre: 'Juan Pérez', origen: 'WhatsApp', ultimoMensaje: '¿Tienen disponibilidad?', hora: '10:30 AM', noLeidos: 2 },
@@ -67,32 +99,32 @@ const Inbox = () => {
           </button>
         </div>
 
-        {/* Historial de Mensajes (Simulado) */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          <div className="flex flex-col items-start">
-            <span className="bg-gray-700 text-gray-200 p-3 rounded-lg rounded-tl-none max-w-md">
-              Hola, vi su anuncio y me gustaría saber más sobre el servicio.
-            </span>
-            <span className="text-xs text-gray-500 mt-1">10:28 AM</span>
+       {/* Renderizado de mensajes en tiempo real */}
+        {listaMensajes.map((msg) => (
+          <div key={msg.id} className="flex flex-col items-end mt-4">
+            <div className="bg-primary-600 text-white p-3 rounded-lg rounded-br-none max-w-[80%]">
+              {msg.texto}
+            </div>
+            <span className="text-xs text-gray-400 mt-1">Ahora</span>
           </div>
-          <div className="flex flex-col items-end">
-            <span className="bg-primary-600 text-white p-3 rounded-lg rounded-tr-none max-w-md">
-              ¡Hola Juan! Claro que sí, con gusto te damos toda la información. ¿De qué ciudad nos escribes?
-            </span>
-            <span className="text-xs text-gray-500 mt-1">10:30 AM</span>
-          </div>
-        </div>
+        ))}
 
         {/* Input de Envío */}
         <div className="p-4 border-t border-gray-700 bg-gray-800">
           <div className="flex gap-2 relative">
             <input 
               type="text" 
+              value={mensajeTexto}
+              onChange={(e) => setMensajeTexto(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && enviarMensaje()}
               placeholder="Escribe un mensaje..." 
               className="flex-1 bg-gray-900 text-gray-200 rounded-lg px-4 py-3 border border-gray-700 focus:outline-none focus:border-primary-500"
             />
-            <button className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-              Enviar <Send className="w-4 h-4" />
+            <button 
+              onClick={enviarMensaje}
+              className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+>
+              <Send className="w-4 h-4" /> Enviar
             </button>
           </div>
         </div>
@@ -102,4 +134,3 @@ const Inbox = () => {
   );
 };
 
-export default Inbox;
