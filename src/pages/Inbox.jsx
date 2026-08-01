@@ -49,10 +49,31 @@ const [chatActivoId, setChatActivoId] = useState(null);
 
     // 2. Escuchar mensajes entrantes en tiempo real
     socket.on('mensaje_entrante', (msg) => {
+      // A) Actualizar el panel derecho (Historial del chat)
       setHistorialPorChat((prev) => ({
         ...prev,
         [msg.chatId]: [...(prev[msg.chatId] || []), msg]
       }));
+
+      // B) Actualizar el panel izquierdo (Lista de conversaciones)
+      setConversaciones((prevConversaciones) => {
+        return prevConversaciones.map((chat) => {
+          // Si el mensaje que acaba de llegar pertenece a este chat...
+          if ( String (chat.id) === String (msg.chatId)) {
+            return {
+              ...chat,
+              ultimoMensaje: msg.texto,
+              // Formateamos la hora del mensaje nuevo para que coincida con el diseño (ej: "10:30 AM")
+              hora: new Date(msg.creado_en).toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit', 
+                hour12: true 
+              })
+            };
+          }
+          return chat; // Si no es de este chat, lo dejamos intacto
+        });
+      });
     });
 
     return () => {
@@ -101,7 +122,7 @@ const [chatActivoId, setChatActivoId] = useState(null);
                 setChatActivo(chat);
                 setChatActivoId(chat.id); // Sincronizamos el ID para el historial
               }}
-              className={`p-4 border-b border-gray-700/50 cursor-pointer transition-colors ${chatActivo.id === chat.id ? 'bg-primary-600/20' : 'hover:bg-gray-700/50'}`}
+              className={`p-4 border-b border-gray-700/50 cursor-pointer transition-colors ${chatActivoId === chat.id ? 'bg-primary-600/20' : 'hover:bg-gray-700/50'}`}
             >
               <div className="flex justify-between items-start mb-1">
                 <h4 className="font-semibold text-gray-200">{chat.nombre}</h4>
@@ -154,7 +175,7 @@ const [chatActivoId, setChatActivoId] = useState(null);
                 </div>
               ))}
 
-{/* Ancla invisible para el auto-scroll */}
+              {/* Ancla invisible para el auto-scroll */}
               <div ref={mensajesFinRef} />
 
             </div>
