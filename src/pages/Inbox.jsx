@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ExternalLink, Send } from 'lucide-react';
 import { io } from 'socket.io-client';
 
@@ -11,6 +11,19 @@ const [chatActivoId, setChatActivoId] = useState(null);
   
   const [conversaciones, setConversaciones] = useState([]);
   const [historialPorChat, setHistorialPorChat] = useState({});
+
+  // Referencia para el auto-scroll
+  const mensajesFinRef = useRef(null);
+
+  // Función para hacer scroll suave hacia abajo
+  const scrollToBottom = () => {
+    mensajesFinRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Efecto que se dispara cada vez que cambia el historial o el chat activo
+  useEffect(() => {
+    scrollToBottom();
+  }, [historialPorChat, chatActivoId]);
 
  useEffect(() => {
     // 1. Obtener la data inicial desde PostgreSQL vía API
@@ -140,6 +153,10 @@ const [chatActivoId, setChatActivoId] = useState(null);
                   </span>
                 </div>
               ))}
+
+{/* Ancla invisible para el auto-scroll */}
+              <div ref={mensajesFinRef} />
+
             </div>
 
             {/* Input de Envío */}
