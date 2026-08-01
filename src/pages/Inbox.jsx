@@ -14,7 +14,11 @@ const [chatActivoId, setChatActivoId] = useState(null);
   const [historialPorChat, setHistorialPorChat] = useState({});
 
   // Hook para animar la lista automáticamente
-  const [listaChatsRef] = useAutoAnimate();
+  const [listaChatsRef] = useAutoAnimate({ 
+    duration: 500, 
+    delay: 100, 
+    easing: 'ease-in-out' 
+  });
 
   // Referencia para el auto-scroll
   const mensajesFinRef = useRef(null);
