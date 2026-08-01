@@ -55,24 +55,36 @@ const [chatActivoId, setChatActivoId] = useState(null);
         [msg.chatId]: [...(prev[msg.chatId] || []), msg]
       }));
 
-      // B) Actualizar el panel izquierdo (Lista de conversaciones)
+   // B) Actualizar el panel izquierdo (Lista de conversaciones y reordenamiento)
       setConversaciones((prevConversaciones) => {
-        return prevConversaciones.map((chat) => {
-          // Si el mensaje que acaba de llegar pertenece a este chat...
-          if ( String (chat.id) === String (msg.chatId)) {
-            return {
-              ...chat,
-              ultimoMensaje: msg.texto,
-              // Formateamos la hora del mensaje nuevo para que coincida con el diseño (ej: "10:30 AM")
-              hora: new Date(msg.creado_en).toLocaleTimeString('en-US', { 
-                hour: 'numeric', 
-                minute: '2-digit', 
-                hour12: true 
-              })
-            };
-          }
-          return chat; // Si no es de este chat, lo dejamos intacto
-        });
+        // 1. Buscamos el índice del chat que recibió el mensaje
+        const index = prevConversaciones.findIndex(chat => String(chat.id) === String(msg.chatId));
+        
+        if (index > -1) {
+          // 2. Copiamos el chat y le actualizamos los datos
+          const chatActualizado = {
+            ...prevConversaciones[index],
+            ultimoMensaje: msg.texto,
+            hora: new Date(msg.creado_en).toLocaleTimeString('en-US', { 
+              hour: 'numeric', 
+              minute: '2-digit', 
+              hour12: true 
+            })
+          };
+
+          // 3. Creamos una copia de la lista entera
+          const nuevaLista = [...prevConversaciones];
+          
+          // 4. Eliminamos el chat de su posición actual
+          nuevaLista.splice(index, 1);
+          
+          // 5. Lo insertamos al principio de la lista (posición 0)
+          nuevaLista.unshift(chatActualizado);
+          
+          return nuevaLista;
+        }
+        
+        return prevConversaciones;
       });
     });
 
