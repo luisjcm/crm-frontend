@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ExternalLink, Send } from 'lucide-react';
 import { io } from 'socket.io-client';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const socket = io('http://localhost:3000');
 
@@ -11,6 +12,9 @@ const [chatActivoId, setChatActivoId] = useState(null);
   
   const [conversaciones, setConversaciones] = useState([]);
   const [historialPorChat, setHistorialPorChat] = useState({});
+
+  // Hook para animar la lista automáticamente
+  const [listaChatsRef] = useAutoAnimate();
 
   // Referencia para el auto-scroll
   const mensajesFinRef = useRef(null);
@@ -126,7 +130,7 @@ const [chatActivoId, setChatActivoId] = useState(null);
         </div>
 
         {/* Lista de chats */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto" ref={listaChatsRef}>
           {conversaciones.map((chat) => (
             <div 
               key={chat.id} 
