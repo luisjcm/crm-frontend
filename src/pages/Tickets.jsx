@@ -27,6 +27,16 @@ const Tickets = () => {
     }
   };
 
+  // Función para actualizar el estado en la base de datos
+  const handleStatusChange = async (id, nuevoEstado) => {
+    try {
+      await api.patch(`/tickets/${id}/estado`, { estado: nuevoEstado });
+      fetchTickets(); // Recargamos la tabla para ver el cambio reflejado
+    } catch (error) {
+      console.error('Error al actualizar el estado del ticket:', error);
+    }
+  };
+
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold text-white mb-2">Help Desk / Soporte</h1>
@@ -41,28 +51,55 @@ const Tickets = () => {
               <th className="px-6 py-4">Asunto</th>
               <th className="px-6 py-4">Estado</th>
               <th className="px-6 py-4">Prioridad</th>
+              <th className="px-6 py-4">Acción</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-700/50">
             {tickets.map((ticket) => (
               <tr key={ticket.id} className="hover:bg-slate-700/20 transition-colors">
                 <td className="px-6 py-4 font-medium text-white">#{ticket.id}</td>
+                
                 <td className="px-6 py-4">
                   <div className="text-white">{ticket.lead_nombre}</div>
                   <div className="text-xs text-slate-500">{ticket.lead_email}</div>
                 </td>
+                
                 <td className="px-6 py-4">{ticket.asunto}</td>
-                <td className="px-6 py-4 capitalize">{ticket.estado}</td>
+                
+                {/* 1. COLUMNA ESTADO: Aquí va el selector */}
+                <td className="px-6 py-4">
+                  <select
+                    value={ticket.estado}
+                    onChange={(e) => handleStatusChange(ticket.id, e.target.value)}
+                    className="bg-slate-900 border border-slate-600 text-slate-300 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 outline-none cursor-pointer"
+                  >
+                    <option value="abierto">Abierto</option>
+                    <option value="en_progreso">En Progreso</option>
+                    <option value="resuelto">Resuelto</option>
+                    <option value="cerrado">Cerrado</option>
+                  </select>
+                </td>
+                
+                {/* 2. COLUMNA PRIORIDAD */}
                 <td className="px-6 py-4">
                   <span className={`px-2.5 py-1 rounded-full text-xs font-medium capitalize ${getPrioridadColor(ticket.prioridad)}`}>
                     {ticket.prioridad}
                   </span>
                 </td>
+                
+                {/* 3. COLUMNA ACCIONES: Botón de ver detalles */}
+                <td className="px-6 py-4">
+                  <button className="text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium">
+                    Ver detalles
+                  </button>
+                </td>
+                
               </tr>
             ))}
+            
             {tickets.length === 0 && (
               <tr>
-                <td colSpan="5" className="px-6 py-8 text-center text-slate-500">
+                <td colSpan="6" className="px-6 py-8 text-center text-slate-500">
                   No hay tickets registrados aún.
                 </td>
               </tr>
