@@ -50,6 +50,15 @@ const Sidebar = () => {
                                 Bandeja de Entrada
                                 </NavLink>
                     </li>
+                     <li>
+                                {/* 3. Hacemos lo mismo aquí */}
+                                <NavLink to="/tickets" className={getNavClasses}>
+                                <Hexagon className="w-5 h-5" />
+                                Soporte
+                                </NavLink>
+                    </li>
+
+                    
                 </ul>
             </nav>
             
